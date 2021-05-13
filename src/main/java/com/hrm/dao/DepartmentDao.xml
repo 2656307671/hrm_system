@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hrm.dao.DepartmentDao">
+    <!-- 使用insert、update、delete、select标签编写sql语句 -->
+    <select id="selectOneById" resultType="com.hrm.entity.Department">
+        select dept_id as deptId,dept_name as deptName,dept_leader as deptLeader
+        from tbl_dept
+        where dept_id=#{deptId}
+    </select>
+
+    <select id="selectOneByName" resultType="com.hrm.entity.Department">
+        select dept_id as deptId,dept_name as deptName,dept_leader as deptLeader
+        from tbl_dept
+        where dept_name=#{deptName}
+    </select>
+
+    <select id="selectOneByLeader" resultType="com.hrm.entity.Department">
+        select dept_id as deptId,dept_name as deptName,dept_leader as deptLeader
+        from tbl_dept
+        where dept_leader=#{deptLeader}
+    </select>
+
+    <select id="selectDeptList" resultType="com.hrm.entity.Department">
+        select dept_id as deptId,dept_name as deptName,dept_leader as deptLeader
+        from tbl_dept
+    </select>
+
+    <resultMap id="deptResult" type="com.hrm.entity.Department">
+        <id column="dept_id" property="deptId"/>
+        <result column="dept_name" property="deptName"/>
+        <result column="dept_leader" property="deptLeader"/>
+    </resultMap>
+    <select id="selectDeptsByLimitAndOffset" resultMap="deptResult">
+        select *
+        from tbl_dept
+        limit #{offset},#{limit}
+    </select>
+
+    <select id="checkDeptsExistsByNameAndleader" resultType="java.lang.Integer">
+        select count(dept_id)
+        from tbl_dept
+        where dept_leader=#{deptLeader} or dept_name=#{deptName}
+    </select>
+
+    <select id="countDepts" resultType="java.lang.Integer">
+        select count(*)
+        from tbl_dept
+    </select>
+
+    <insert id="insertDept">
+        insert into tbl_dept(dept_name,dept_leader)
+        values (#{department.deptName},#{department.deptLeader})
+    </insert>
+
+    <update id="updateDeptById">
+        update tbl_dept
+        set dept_name=#{department.deptName},dept_leader=#{department.deptLeader}
+        where dept_id=#{deptId}
+    </update>
+
+    <delete id="deleteDeptById">
+        delete from tbl_dept
+        where dept_id=#{deptId}
+    </delete>
+
+</mapper>
